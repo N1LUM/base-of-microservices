@@ -1,18 +1,21 @@
 package repository
 
 import (
+	"context"
 	"site-constructor/internal/models"
 
 	"github.com/google/uuid"
+	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 )
 
 type UserRepository struct {
 	postgres *gorm.DB
+	redis    *redis.Client
 }
 
-func NewUserRepository(postgres *gorm.DB) *UserRepository {
-	return &UserRepository{postgres: postgres}
+func NewUserRepository(postgres *gorm.DB, redis *redis.Client) *UserRepository {
+	return &UserRepository{postgres: postgres, redis: redis}
 }
 
 func (r *UserRepository) Create(user models.User) (*models.User, error) {
@@ -58,4 +61,8 @@ func (r *UserRepository) Delete(id uuid.UUID) error {
 		return err
 	}
 	return nil
+}
+
+func (r *UserRepository) DeleteRefreshTokenByUserID(userID uuid.UUID, ctx context.Context) error {
+	return r.redis.Del(ctx, "refresh:"+userID.String()).Err()
 }

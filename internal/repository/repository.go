@@ -13,9 +13,10 @@ type User interface {
 	Create(user models.User) (*models.User, error)
 	GetByID(id uuid.UUID) (*models.User, error)
 	GetByUsername(username string) (*models.User, error)
+	GetAll() ([]models.User, error)
 	Update(user *models.User) (*models.User, error)
 	Delete(id uuid.UUID) error
-	GetAll() ([]models.User, error)
+	DeleteRefreshTokenByUserID(userID uuid.UUID, ctx context.Context) error
 }
 
 type Auth interface {
@@ -31,6 +32,6 @@ type Repository struct {
 func NewRepository(postgres *gorm.DB, redis *redis.Client) *Repository {
 	return &Repository{
 		Auth: NewAuthRepo(postgres, redis),
-		User: NewUserRepository(postgres),
+		User: NewUserRepository(postgres, redis),
 	}
 }

@@ -16,7 +16,7 @@ type User interface {
 	GetByID(id uuid.UUID) (*models.User, error)
 	GetUserByUsername(username string) (*models.User, error)
 	Update(id uuid.UUID, input user_context.UpdateUserInput) (*models.User, error)
-	DeleteUser(id uuid.UUID) error
+	DeleteUser(id uuid.UUID, ctx context.Context) error
 }
 
 type Auth interface {

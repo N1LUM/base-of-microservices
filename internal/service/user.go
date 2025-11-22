@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"site-constructor/internal/apperrors"
@@ -118,10 +119,13 @@ func (s *UserService) Update(id uuid.UUID, input user_context.UpdateUserInput) (
 	return updatedUser, nil
 }
 
-// TODO Добавить удаление токена
-func (s *UserService) DeleteUser(id uuid.UUID) error {
+func (s *UserService) DeleteUser(id uuid.UUID, ctx context.Context) error {
 	if err := s.repo.Delete(id); err != nil {
 		return fmt.Errorf("failed to delete user: %w", err)
+	}
+
+	if err := s.repo.DeleteRefreshTokenByUserID(id, ctx); err != nil {
+		return fmt.Errorf("failed to delete refresh token: %w", err)
 	}
 
 	logrus.Infof("[UserService] User deleted successfully by ID=%s", id)

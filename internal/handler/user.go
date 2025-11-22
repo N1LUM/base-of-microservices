@@ -87,8 +87,9 @@ func (h *Handler) getUserByUsername(c *gin.Context) {
 
 func (h *Handler) deleteUser(c *gin.Context) {
 	id := c.Param("id")
+	ctx := c.Request.Context()
 
-	if err := h.services.User.DeleteUser(parseUUID(id)); err != nil {
+	if err := h.services.User.DeleteUser(parseUUID(id), ctx); err != nil {
 		logrus.Errorf("[UserHandler] Failed to delete user by ID=%s: %v", id, err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
