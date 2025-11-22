@@ -54,7 +54,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		{
 			users.GET("/", h.getUsers)                               // Получить список пользователей
 			users.GET("/:id", h.getUserByID)                         // Получить пользователя по ID
-			users.PUT("/:id", h.updateUser)                          // Обновить пользователя по ID
+			users.PATCH("/:id", h.updateUser)                        // Обновить пользователя по ID
 			users.DELETE("/:id", h.deleteUser)                       // Удалить пользователя по ID
 			users.GET("/by-username/:username", h.getUserByUsername) // Получить пользователя по username
 		}

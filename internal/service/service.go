@@ -12,11 +12,10 @@ import (
 
 type User interface {
 	CreateUser(input user_context.CreateUserInput) (*models.User, error)
-	LoginUser(username, password string) (*models.User, error)
 	GetAllUsers() ([]models.User, error)
-	GetUserByID(id uuid.UUID) (*models.User, error)
+	GetByID(id uuid.UUID) (*models.User, error)
 	GetUserByUsername(username string) (*models.User, error)
-	UpdateUser(id uuid.UUID, input user_context.UpdateUserInput) (*models.User, error)
+	Update(id uuid.UUID, input user_context.UpdateUserInput) (*models.User, error)
 	DeleteUser(id uuid.UUID) error
 }
 

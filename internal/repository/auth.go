@@ -6,7 +6,6 @@ import (
 	"site-constructor/internal/models"
 
 	"github.com/redis/go-redis/v9"
-	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
@@ -16,7 +15,6 @@ type AuthRepository struct {
 }
 
 func NewAuthRepo(postgres *gorm.DB, redis *redis.Client) *AuthRepository {
-	logrus.Info("[AuthRepository] Initialized AuthRepository")
 	return &AuthRepository{postgres: postgres, redis: redis}
 }
 

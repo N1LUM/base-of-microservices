@@ -17,7 +17,6 @@ type AuthService struct {
 }
 
 func NewAuthService(repo repository.Auth, jwtManager *auth.JWTManager) *AuthService {
-	logrus.Info("[AuthService] Initialized AuthService")
 	return &AuthService{repo: repo, jwtManager: jwtManager}
 }
 
@@ -37,6 +36,7 @@ func (s *AuthService) Login(username, password string, ctx context.Context) (*mo
 		return nil, "", "", err
 	}
 
+	logrus.Infof("[AuthService] User authenticated successfully: ID=%s, Username=%s, Name=%s", user.ID, user.Username, user.Name)
 	return user, accessToken, refreshToken, nil
 }
 
@@ -55,6 +55,7 @@ func (s *AuthService) Refresh(userID string, token string, ctx context.Context) 
 		return "", "", err
 	}
 
+	logrus.Infof("[AuthService] Refresh and Access token generated successfully for user: ID=%s", userID)
 	return accessToken, refreshToken, nil
 }
 
