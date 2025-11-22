@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"errors"
 	"net/http"
 	"site-constructor/internal/dto/user_context"
 
@@ -9,7 +8,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	"gorm.io/gorm"
 )
 
 func (h *Handler) createUser(c *gin.Context) {
@@ -46,11 +44,6 @@ func (h *Handler) getUserByID(c *gin.Context) {
 
 	user, err := h.services.User.GetByID(parseUUID(id))
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			logrus.Warnf("[UserHandler] User not found by ID=%s", id)
-			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
-			return
-		}
 		logrus.Errorf("[UserHandler] Failed to get user by ID=%s: %v", id, err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -71,11 +64,6 @@ func (h *Handler) updateUser(c *gin.Context) {
 
 	updatedUser, err := h.services.User.Update(parseUUID(id), input)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			logrus.Warnf("[UserHandler] User not found for update by ID=%s", id)
-			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
-			return
-		}
 		logrus.Errorf("[UserHandler] Failed to update user by ID=%s: %v", id, err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -89,11 +77,6 @@ func (h *Handler) getUserByUsername(c *gin.Context) {
 
 	user, err := h.services.User.GetUserByUsername(username)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) || user == nil {
-			logrus.Warnf("[Handler] User not found by Username=%s", username)
-			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
-			return
-		}
 		logrus.Errorf("[Handler] Failed to get user by Username=%s: %v", username, err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

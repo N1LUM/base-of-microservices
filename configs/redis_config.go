@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"github.com/joho/godotenv"
-	"github.com/sirupsen/logrus"
 )
 
 type RedisConfig struct {
@@ -17,8 +16,6 @@ type RedisConfig struct {
 }
 
 func InitRedisConfig() *RedisConfig {
-	logrus.Info("Trying initialize redis configuration...")
-
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatalf("Error loading .env file")
@@ -35,8 +32,6 @@ func InitRedisConfig() *RedisConfig {
 		Password: os.Getenv("REDIS_PASSWORD"),
 		DBNumber: dbNumber,
 	}
-
-	logrus.Info("Successfully initialized redis configuration")
 
 	return &cfg
 }

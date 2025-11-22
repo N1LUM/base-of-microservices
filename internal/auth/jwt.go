@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -20,7 +19,6 @@ type JWTManager struct {
 }
 
 func NewJWTManager(accessSecret, refreshSecret []byte) *JWTManager {
-	logrus.Info("[JWTManager] Initialized JWTManager")
 	return &JWTManager{
 		AccessSecret:  accessSecret,
 		RefreshSecret: refreshSecret,

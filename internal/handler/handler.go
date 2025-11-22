@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 type Handler struct {
@@ -16,7 +15,6 @@ type Handler struct {
 }
 
 func NewHandler(services *service.Service, jwtManager *auth.JWTManager) *Handler {
-	logrus.Info("[Handler] Initialized Handler")
 	return &Handler{
 		services:   services,
 		jwtManager: jwtManager,
@@ -24,8 +22,6 @@ func NewHandler(services *service.Service, jwtManager *auth.JWTManager) *Handler
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
-	logrus.Info("[Handler.InitRoutes] Trying to initialize routes")
-
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
@@ -59,8 +55,6 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			users.GET("/by-username/:username", h.getUserByUsername) // Получить пользователя по username
 		}
 	}
-
-	logrus.Info("[Handler.InitRoutes] Successfully initialized routes")
 
 	return router
 }

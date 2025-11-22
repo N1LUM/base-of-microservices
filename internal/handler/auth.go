@@ -1,13 +1,10 @@
 package handler
 
 import (
+	"net/http"
 	"site-constructor/internal/dto/auth_context"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
-
-	"errors"
-	"net/http"
 )
 
 func (h *Handler) Login(c *gin.Context) {
@@ -21,10 +18,6 @@ func (h *Handler) Login(c *gin.Context) {
 
 	user, accessToken, refreshToken, err := h.services.Auth.Login(input.Username, input.Password, ctx)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
-			return
-		}
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
@@ -48,7 +41,7 @@ func (h *Handler) Refresh(c *gin.Context) {
 
 	claims, err := h.jwtManager.ParseRefreshToken(input.RefreshToken)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
